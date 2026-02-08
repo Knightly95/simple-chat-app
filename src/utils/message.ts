@@ -1,3 +1,5 @@
+import { STORAGE_KEYS, USER_CONFIG } from '@/constants/chat';
+
 export const formatTime = (date: Date | string): string => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   return dateObj.toLocaleTimeString();
@@ -21,15 +23,15 @@ const USER_NAMES = [
 ];
 
 export const getCurrentUser = (): string => {
-  const stored = localStorage.getItem('chat-user');
+  const stored = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
   if (stored) {
     return stored;
   }
 
   const randomName = USER_NAMES[Math.floor(Math.random() * USER_NAMES.length)];
-  const randomId = Math.floor(Math.random() * 1000);
+  const randomId = Math.floor(Math.random() * USER_CONFIG.RANDOM_ID_MAX);
   const userName = `${randomName}${randomId}`;
 
-  localStorage.setItem('chat-user', userName);
+  localStorage.setItem(STORAGE_KEYS.CURRENT_USER, userName);
   return userName;
 };

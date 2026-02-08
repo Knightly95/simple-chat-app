@@ -2,6 +2,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import { memo } from 'react';
 import WifiIcon from '@mui/icons-material/Wifi';
 import WifiOffIcon from '@mui/icons-material/WifiOff';
+import { POSITION_CONSTANTS } from '@/constants/chat';
 
 interface WebSocketToggleProps {
   enabled: boolean;
@@ -21,14 +22,14 @@ function WebSocketToggleComponent({ enabled, onToggle }: WebSocketToggleProps) {
         onClick={onToggle}
         sx={{
           position: 'absolute',
-          top: 16,
-          right: 16,
+          top: POSITION_CONSTANTS.TOGGLE_TOP,
+          right: POSITION_CONSTANTS.TOGGLE_RIGHT,
           bgcolor: enabled ? 'success.main' : 'action.disabled',
           color: 'white',
           '&:hover': {
             bgcolor: enabled ? 'success.dark' : 'action.hover',
           },
-          zIndex: 1000,
+          zIndex: POSITION_CONSTANTS.Z_INDEX_TOGGLE,
         }}
         size="small"
       >

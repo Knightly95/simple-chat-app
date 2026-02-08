@@ -6,6 +6,7 @@ import {
   type GetMessagesParams,
 } from '@/services/messageService';
 import { API_CONFIG } from '@/constants/api';
+import { getErrorMessage, ERROR_MESSAGES } from '@/utils/error';
 
 interface MessageStore {
   messages: Message[];
@@ -46,8 +47,10 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
       const messages = await messageService.getMessages(queryParams);
       set({ messages, loading: false });
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to fetch messages';
+      const errorMessage = getErrorMessage(
+        error,
+        ERROR_MESSAGES.FETCH_MESSAGES_FAILED
+      );
       set({ error: errorMessage, loading: false });
     }
   },
@@ -59,8 +62,10 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
       get().addMessage(message);
       set({ loading: false });
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to send message';
+      const errorMessage = getErrorMessage(
+        error,
+        ERROR_MESSAGES.SEND_MESSAGE_FAILED
+      );
       set({ error: errorMessage, loading: false });
     }
   },

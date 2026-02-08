@@ -14,3 +14,21 @@ export const UI_CONSTANTS = {
   BORDER_RADIUS_SM: 2,
   MAX_MESSAGE_WIDTH: '70%',
 } as const;
+
+export const WEBSOCKET_CONFIG = {
+  POLLING_INTERVAL_MS: 5000,
+} as const;
+
+export const STORAGE_KEYS = {
+  CURRENT_USER: 'chat-user',
+} as const;
+
+export const POSITION_CONSTANTS = {
+  TOGGLE_TOP: 16,
+  TOGGLE_RIGHT: 16,
+  Z_INDEX_TOGGLE: 1000,
+} as const;
+
+export const USER_CONFIG = {
+  RANDOM_ID_MAX: 1000,
+} as const;

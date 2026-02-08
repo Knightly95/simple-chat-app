@@ -4,7 +4,11 @@ import type { CreateMessageRequest } from '@/types/chat';
 import { MessageList } from '@/components/MessageList';
 import { MessageInput } from '@/components/MessageInput';
 import { WebSocketToggle } from '@/components/WebSocketToggle';
-import { KEYBOARD_KEYS } from '@/constants/chat';
+import {
+  KEYBOARD_KEYS,
+  WEBSOCKET_CONFIG,
+  UI_CONSTANTS,
+} from '@/constants/chat';
 import { LAYOUT_STYLES } from '@/constants/styles';
 import { useMessageStore } from '@/stores/messageStore';
 import { getCurrentUser } from '@/utils/message';
@@ -28,13 +32,15 @@ export default function ChatPage() {
 
     const interval = setInterval(() => {
       fetchMessages();
-    }, 5000);
+    }, WEBSOCKET_CONFIG.POLLING_INTERVAL_MS);
 
     return () => clearInterval(interval);
   }, [simulateWebSocket, fetchMessages]);
 
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: UI_CONSTANTS.SCROLL_BEHAVIOR,
+    });
   }, []);
 
   useEffect(() => {
