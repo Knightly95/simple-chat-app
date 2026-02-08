@@ -1,113 +1,64 @@
-import { useState } from 'react';
-import {
-  Box,
-  Paper,
-  TextField,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import type { Message } from '@/types/chat';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Box } from '@mui/material';
+import type { CreateMessageRequest } from '@/types/chat';
+import { MessageList } from '@/components/MessageList';
+import { MessageInput } from '@/components/MessageInput';
+import { CHAT_CONSTANTS, KEYBOARD_KEYS } from '@/constants/chat';
+import { LAYOUT_STYLES } from '@/constants/styles';
+import { useMessageStore } from '@/stores/messageStore';
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messages = useMessageStore((state) => state.messages);
+  const fetchMessages = useMessageStore((state) => state.fetchMessages);
+  const sendMessage = useMessageStore((state) => state.sendMessage);
 
-  const handleSendMessage = () => {
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
+
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
+
+  const handleSendMessage = useCallback(async () => {
     if (!inputValue.trim()) {
       return;
     }
 
-    const newMessage: Message = {
-      _id: `${Date.now()}`,
+    const messageData: CreateMessageRequest = {
       message: inputValue,
-      author: 'User',
-      createdAt: new Date(),
+      author: CHAT_CONSTANTS.AUTHOR_DEFAULT,
     };
 
-    setMessages([...messages, newMessage]);
+    await sendMessage(messageData);
     setInputValue('');
-  };
+  }, [inputValue, sendMessage]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === KEYBOARD_KEYS.ENTER && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+    },
+    [handleSendMessage]
+  );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        bgcolor: '#f5f5f5',
-      }}
-    >
-      <Box
-        sx={{
-          flex: 1,
-          overflowY: 'auto',
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
-      >
-        {messages.length === 0 ? (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-            }}
-          >
-            <Typography variant="h6" color="textSecondary">
-              No messages yet
-            </Typography>
-          </Box>
-        ) : (
-          messages.map((message) => (
-            <Paper
-              key={message._id}
-              sx={{
-                p: 2,
-                bgcolor: 'primary.main',
-                color: 'white',
-                maxWidth: '70%',
-                alignSelf: 'flex-start',
-                borderRadius: 2,
-              }}
-            >
-              <Typography variant="body1">{message.message}</Typography>
-            </Paper>
-          ))
-        )}
-      </Box>
-
-      <Paper
-        sx={{
-          p: 2,
-          borderRadius: 0,
-          boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-end' }}>
-          <TextField
-            fullWidth
-            placeholder="Type your message..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            multiline
-            maxRows={4}
-            variant="outlined"
-            size="small"
-          />
-          <IconButton
-            color="primary"
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim()}
-          >
-            <SendIcon />
-          </IconButton>
-        </Stack>
-      </Paper>
+    <Box sx={LAYOUT_STYLES.container}>
+      <MessageList messages={messages} scrollRef={messagesEndRef} />
+      <MessageInput
+        value={inputValue}
+        onChange={setInputValue}
+        onSendMessage={handleSendMessage}
+        onKeyDown={handleKeyDown}
+      />
     </Box>
   );
 }
