@@ -32,7 +32,20 @@ npm run dev
 
 And visit <http://localhost:5173>
 
-Useful scripts
+## Multi-User Simulation
+
+The app simulates multiple users by generating a unique user identity for each browser/window using localStorage.
+
+**To test multi-user functionality:**
+
+1. Open the app in your normal browser window → you'll be assigned a random user (e.g., "Alice123")
+2. Open the app in a private/incognito window → you'll be assigned a different user (e.g., "Bob456")
+3. Send a message from either window
+4. **Reload the other window** to see the new message appear from the other user
+
+**Note about real-time updates:** This implementation requires manual page reloads to fetch new messages because the assignment does not include WebSocket support. In a production environment with WebSocket integration, the app could subscribe to message events and display real-time updates automatically without requiring page refreshes.
+
+## Useful Scripts
 
 - `npm run dev` — start dev server
 - `npm run build` — run TypeScript build and Vite production build
