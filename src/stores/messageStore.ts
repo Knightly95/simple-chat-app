@@ -22,6 +22,8 @@ interface MessageStore {
   sendMessage: (data: CreateMessageRequest) => Promise<void>;
 }
 
+export type { MessageStore };
+
 export const useMessageStore = create<MessageStore>((set, get) => ({
   messages: [],
   loading: false,
