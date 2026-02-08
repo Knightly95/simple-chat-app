@@ -1,5 +1,6 @@
 export const LAYOUT_STYLES = {
   container: {
+    position: 'relative' as const,
     display: 'flex',
     flexDirection: 'column' as const,
     height: '100vh',
@@ -36,6 +37,8 @@ export const MESSAGE_STYLES = {
     maxWidth: '70%', // Simplified - works across all screen sizes
     alignSelf: 'flex-start' as const,
     borderRadius: 1,
+    wordBreak: 'break-word' as const,
+    overflowWrap: 'break-word' as const,
   },
   userBubble: {
     p: 2, // 16px from design images
@@ -44,6 +47,8 @@ export const MESSAGE_STYLES = {
     maxWidth: '70%', // Simplified - works across all screen sizes
     alignSelf: 'flex-end' as const,
     borderRadius: 1,
+    wordBreak: 'break-word' as const,
+    overflowWrap: 'break-word' as const,
   },
   timestamp: {
     mt: 1,

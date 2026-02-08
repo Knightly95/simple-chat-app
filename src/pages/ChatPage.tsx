@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import type { CreateMessageRequest } from '@/types/chat';
 import { MessageList } from '@/components/MessageList';
 import { MessageInput } from '@/components/MessageInput';
+import { WebSocketToggle } from '@/components/WebSocketToggle';
 import { KEYBOARD_KEYS } from '@/constants/chat';
 import { LAYOUT_STYLES } from '@/constants/styles';
 import { useMessageStore } from '@/stores/messageStore';
@@ -10,6 +11,7 @@ import { getCurrentUser } from '@/utils/message';
 
 export default function ChatPage() {
   const [inputValue, setInputValue] = useState('');
+  const [simulateWebSocket, setSimulateWebSocket] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const currentUser = getCurrentUser();
   const messages = useMessageStore((state) => state.messages);
@@ -19,6 +21,17 @@ export default function ChatPage() {
   useEffect(() => {
     fetchMessages();
   }, [fetchMessages]);
+
+  // Simulate WebSocket with polling
+  useEffect(() => {
+    if (!simulateWebSocket) return;
+
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [simulateWebSocket, fetchMessages]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -54,6 +67,10 @@ export default function ChatPage() {
 
   return (
     <Box sx={LAYOUT_STYLES.container}>
+      <WebSocketToggle
+        enabled={simulateWebSocket}
+        onToggle={() => setSimulateWebSocket(!simulateWebSocket)}
+      />
       <MessageList
         messages={messages}
         scrollRef={messagesEndRef}

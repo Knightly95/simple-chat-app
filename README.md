@@ -41,9 +41,17 @@ The app simulates multiple users by generating a unique user identity for each b
 1. Open the app in your normal browser window → you'll be assigned a random user (e.g., "Alice123")
 2. Open the app in a private/incognito window → you'll be assigned a different user (e.g., "Bob456")
 3. Send a message from either window
-4. **Reload the other window** to see the new message appear from the other user
+4. **Click the WiFi toggle button** in the top-right corner to enable auto-refresh
+5. Messages from other users will automatically appear without manual reloads
 
-**Note about real-time updates:** This implementation requires manual page reloads to fetch new messages because the assignment does not include WebSocket support. In a production environment with WebSocket integration, the app could subscribe to message events and display real-time updates automatically without requiring page refreshes.
+## WebSocket Simulation
+
+Since this assignment does not include WebSocket support, the app includes a **WebSocket simulator toggle** (WiFi icon in the top-right corner):
+
+- **WiFi icon (green)**: Auto-refresh is **enabled** - the app polls the `getMessages` endpoint every 5 seconds to fetch new messages
+- **WiFi-off icon (gray)**: Auto-refresh is **disabled** - you need to manually reload the page to see new messages
+
+When enabled, this simulates real-time WebSocket behavior by automatically updating the message store with new messages from other users. In a production environment with actual WebSocket integration, this polling mechanism would be replaced with a subscription to server-sent message events for true real-time updates.
 
 ## Useful Scripts
 

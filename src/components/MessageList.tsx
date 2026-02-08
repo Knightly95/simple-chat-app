@@ -1,4 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material';
+import { memo } from 'react';
 import type { Message } from '@/types/chat';
 import { formatTime } from '@/utils/message';
 import { CHAT_CONSTANTS } from '@/constants/chat';
@@ -10,7 +11,7 @@ interface MessageListProps {
   currentUser: string;
 }
 
-export function MessageList({
+function MessageListComponent({
   messages,
   scrollRef,
   currentUser,
@@ -35,7 +36,9 @@ export function MessageList({
   );
 }
 
-function EmptyState() {
+export const MessageList = memo(MessageListComponent);
+
+const EmptyState = memo(function EmptyState() {
   return (
     <Box
       sx={{
@@ -50,14 +53,17 @@ function EmptyState() {
       </Typography>
     </Box>
   );
-}
+});
 
 interface MessageBubbleProps {
   message: Message;
   currentUser: string;
 }
 
-function MessageBubble({ message, currentUser }: MessageBubbleProps) {
+const MessageBubble = memo(function MessageBubble({
+  message,
+  currentUser,
+}: MessageBubbleProps) {
   const isUserMessage = message.author === currentUser;
   const bubbleStyle = isUserMessage
     ? MESSAGE_STYLES.userBubble
@@ -74,4 +80,4 @@ function MessageBubble({ message, currentUser }: MessageBubbleProps) {
       </Typography>
     </Paper>
   );
-}
+});

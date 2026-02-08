@@ -1,4 +1,5 @@
 import { Paper, Stack, TextField, IconButton } from '@mui/material';
+import { memo } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { CHAT_CONSTANTS } from '@/constants/chat';
 import { LAYOUT_STYLES } from '@/constants/styles';
@@ -12,7 +13,7 @@ interface MessageInputProps {
   disabled?: boolean;
 }
 
-export function MessageInput({
+function MessageInputComponent({
   value,
   onChange,
   onSendMessage,
@@ -52,3 +53,5 @@ export function MessageInput({
     </Paper>
   );
 }
+
+export const MessageInput = memo(MessageInputComponent);
