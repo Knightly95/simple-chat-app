@@ -30,6 +30,21 @@ Material-UI (MUI) offers a comprehensive set of production-ready React component
 
 The priority was to deliver a visually appealing, accessible UI efficiently.
 
+## Mock Data Architecture - MSW Structure with Playwright
+
+I structured mock data using MSW conventions but use Playwright's native `page.route()` for E2E test interception.
+
+**Why this approach?**
+
+Mock data is centralized in `src/mocks/data/` and reusable across development and tests. Playwright's `page.route()` provides reliable browser-level interception for E2E tests without the complexity of running MSW's service worker in the test environment.
+
+**Trade-offs considered:**
+
+- **MSW service worker in tests:** Industry standard but adds complexity for E2E setup.
+- **Centralized data + Playwright routes:** Best of both worlds—reusable mock data with simpler, more reliable E2E interception.
+
+The goal was to demonstrate separation of concerns and reusability without over-engineering the test layer.
+
 ## Code Quality - Prettier + ESLint
 
 I chose Prettier and ESLint for code quality and consistency.
