@@ -12,13 +12,13 @@ interface MessageInputProps {
   disabled?: boolean;
 }
 
-export const MessageInput: React.FC<MessageInputProps> = ({
+export function MessageInput({
   value,
   onChange,
   onSendMessage,
   onKeyDown,
   disabled = false,
-}) => {
+}: MessageInputProps) {
   const isDisabled = disabled || !isValidMessage(value);
 
   return (
@@ -51,4 +51,4 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       </Stack>
     </Paper>
   );
-};
+}

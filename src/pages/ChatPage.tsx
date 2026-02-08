@@ -3,13 +3,15 @@ import { Box } from '@mui/material';
 import type { CreateMessageRequest } from '@/types/chat';
 import { MessageList } from '@/components/MessageList';
 import { MessageInput } from '@/components/MessageInput';
-import { CHAT_CONSTANTS, KEYBOARD_KEYS } from '@/constants/chat';
+import { KEYBOARD_KEYS } from '@/constants/chat';
 import { LAYOUT_STYLES } from '@/constants/styles';
 import { useMessageStore } from '@/stores/messageStore';
+import { getCurrentUser } from '@/utils/message';
 
 export default function ChatPage() {
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const currentUser = getCurrentUser();
   const messages = useMessageStore((state) => state.messages);
   const fetchMessages = useMessageStore((state) => state.fetchMessages);
   const sendMessage = useMessageStore((state) => state.sendMessage);
@@ -33,12 +35,12 @@ export default function ChatPage() {
 
     const messageData: CreateMessageRequest = {
       message: inputValue,
-      author: CHAT_CONSTANTS.AUTHOR_DEFAULT,
+      author: currentUser,
     };
 
     await sendMessage(messageData);
     setInputValue('');
-  }, [inputValue, sendMessage]);
+  }, [inputValue, currentUser, sendMessage]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -52,7 +54,11 @@ export default function ChatPage() {
 
   return (
     <Box sx={LAYOUT_STYLES.container}>
-      <MessageList messages={messages} scrollRef={messagesEndRef} />
+      <MessageList
+        messages={messages}
+        scrollRef={messagesEndRef}
+        currentUser={currentUser}
+      />
       <MessageInput
         value={inputValue}
         onChange={setInputValue}

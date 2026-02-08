@@ -6,3 +6,30 @@ export const formatTime = (date: Date | string): string => {
 export const isValidMessage = (message: string): boolean => {
   return message.trim().length > 0;
 };
+
+const USER_NAMES = [
+  'Alice',
+  'Bob',
+  'Charlie',
+  'Diana',
+  'Eve',
+  'Frank',
+  'Grace',
+  'Henry',
+  'Ivy',
+  'Jack',
+];
+
+export const getCurrentUser = (): string => {
+  const stored = localStorage.getItem('chat-user');
+  if (stored) {
+    return stored;
+  }
+
+  const randomName = USER_NAMES[Math.floor(Math.random() * USER_NAMES.length)];
+  const randomId = Math.floor(Math.random() * 1000);
+  const userName = `${randomName}${randomId}`;
+
+  localStorage.setItem('chat-user', userName);
+  return userName;
+};
