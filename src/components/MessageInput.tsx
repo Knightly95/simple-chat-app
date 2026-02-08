@@ -1,6 +1,7 @@
 import { Paper, Stack, TextField, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { CHAT_CONSTANTS } from '@/constants/chat';
+import { LAYOUT_STYLES } from '@/constants/styles';
 import { isValidMessage } from '@/utils/message';
 
 interface MessageInputProps {
@@ -21,13 +22,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   const isDisabled = disabled || !isValidMessage(value);
 
   return (
-    <Paper
-      sx={{
-        p: 2,
-        borderRadius: 0,
-        boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
-      }}
-    >
+    <Paper sx={LAYOUT_STYLES.inputContainer}>
       <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-end' }}>
         <TextField
           fullWidth

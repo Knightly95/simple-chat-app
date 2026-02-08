@@ -1,7 +1,8 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import type { Message } from '@/types/chat';
 import { formatTime } from '@/utils/message';
-import { CHAT_CONSTANTS, UI_CONSTANTS } from '@/constants/chat';
+import { CHAT_CONSTANTS } from '@/constants/chat';
+import { LAYOUT_STYLES, MESSAGE_STYLES } from '@/constants/styles';
 
 interface MessageListProps {
   messages: Message[];
@@ -15,16 +16,7 @@ export const MessageList: React.FC<MessageListProps> = ({
   const hasMessages = messages.length > 0;
 
   return (
-    <Box
-      sx={{
-        flex: 1,
-        overflowY: 'auto',
-        p: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2,
-      }}
-    >
+    <Box sx={LAYOUT_STYLES.messageListContainer}>
       {!hasMessages && <EmptyState />}
 
       {hasMessages &&
@@ -56,25 +48,21 @@ interface MessageBubbleProps {
   message: Message;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => (
-  <Paper
-    sx={{
-      p: 2,
-      bgcolor: 'primary.main',
-      color: 'white',
-      maxWidth: UI_CONSTANTS.MAX_MESSAGE_WIDTH,
-      alignSelf: 'flex-start',
-      borderRadius: UI_CONSTANTS.BORDER_RADIUS_SM,
-    }}
-  >
-    <Typography variant="body1">{message.message}</Typography>
-    <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-      <Typography variant="caption" sx={{ opacity: 0.7 }}>
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
+  const isUserMessage = message.author === CHAT_CONSTANTS.AUTHOR_DEFAULT;
+  const bubbleStyle = isUserMessage
+    ? MESSAGE_STYLES.userBubble
+    : MESSAGE_STYLES.otherUserBubble;
+
+  return (
+    <Paper sx={bubbleStyle}>
+      {!isUserMessage && (
+        <Typography sx={MESSAGE_STYLES.author}>{message.author}</Typography>
+      )}
+      <Typography variant="body2">{message.message}</Typography>
+      <Typography variant="caption" sx={MESSAGE_STYLES.timestamp}>
         {formatTime(message.createdAt)}
       </Typography>
-      <Typography variant="caption" sx={{ opacity: 0.7 }}>
-        {message.author}
-      </Typography>
-    </Stack>
-  </Paper>
-);
+    </Paper>
+  );
+};
